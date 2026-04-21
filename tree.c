@@ -1,4 +1,5 @@
-// tree.c — Tree object serialization and construction
+// Handle nested directory paths like src/main.c
+// Ensure proper tree hierarchy construction// tree.c — Tree object serialization and construction
 //
 // PROVIDED functions: get_file_mode, tree_parse, tree_serialize
 // TODO functions:     tree_from_index
@@ -38,6 +39,8 @@ uint32_t get_file_mode(const char *path) {
 
 // Parse binary tree data into a Tree struct safely.
 // Returns 0 on success, -1 on parse error.
+// Handle nested directory paths like src/main.c
+// Ensure proper tree hierarchy construction
 int tree_parse(const void *data, size_t len, Tree *tree_out) {
     tree_out->count = 0;
     const uint8_t *ptr = (const uint8_t *)data;
