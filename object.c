@@ -10,6 +10,7 @@
 // Phase1 Step 2: added hashing logicx
 // Phase1 Step 3: added deduplication
 // Phase1 Step 4: added object_read parsing
+// Phase1 Step 5: final fixes and tests passing
 #include "pes.h"
 #include <stdio.h>
 #include <stdlib.h>
