@@ -131,6 +131,8 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
 //   - object_write    : save that binary buffer to the store as OBJ_TREE
 //
 // Returns 0 on success, -1 on error.
+// Builds a tree object from index entries
+// Converts flat file list into hierarchical directory structure
 int tree_from_index(ObjectID *id_out) {
     // TODO: Implement recursive tree building
     // (See Lab Appendix for logical steps)
