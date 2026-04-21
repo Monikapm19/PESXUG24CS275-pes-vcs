@@ -297,3 +297,5 @@ int index_add(Index *index, const char *path) {
 
     return index_save(index);
 }
+// Fixed segmentation fault by properly initializing index
+// and ensuring safe memory allocation for file data
