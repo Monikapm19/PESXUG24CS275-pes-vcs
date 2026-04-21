@@ -190,6 +190,10 @@ static int cmp_entries(const void *a, const void *b) {
     const IndexEntry *eb = (const IndexEntry *)b;
     return strcmp(ea->path, eb->path);
 }
+// Saves index to disk using temporary file + rename
+// Ensures atomic updates to prevent corruption
+// Writes metadata in human-readable format
+
 int index_save(const Index *index) {
     FILE *f = fopen(".pes/index.tmp", "w");
     if (!f) return -1;
