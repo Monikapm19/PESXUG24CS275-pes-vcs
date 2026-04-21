@@ -12,8 +12,7 @@
 // Phase 2: Tree module implementation
 // Handles directory representation as tree objects
 // Maps file paths into hierarchical structure
-// Each tree node is stored as content-addressable object
-// Uses SHA-256 hash for uniqueness
+
 #include "tree.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,6 +29,8 @@
 // ─── PROVIDED ───────────────────────────────────────────────────────────────
 
 // Determine the object mode for a filesystem path.
+// Each tree node is stored as content-addressable object
+// Uses SHA-256 hash for uniqueness
 uint32_t get_file_mode(const char *path) {
     struct stat st;
     if (lstat(path, &st) != 0) return 0;
@@ -93,6 +94,7 @@ static int compare_tree_entries(const void *a, const void *b) {
 // Serialize a Tree struct into binary format for storage.
 // Caller must free(*data_out).
 // Returns 0 on success, -1 on error.
+// Tree serialization must be deterministic for consistent hashing
 int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
     // Estimate max size: (6 bytes mode + 1 byte space + 256 bytes name + 1 byte null + 32 bytes hash) per entry
     size_t max_size = tree->count * 296; 
