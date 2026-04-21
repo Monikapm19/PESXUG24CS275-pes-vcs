@@ -12,6 +12,8 @@
 // Phase 2: Tree module implementation
 // Handles directory representation as tree objects
 // Maps file paths into hierarchical structure
+// Each tree node is stored as content-addressable object
+// Uses SHA-256 hash for uniqueness
 #include "tree.h"
 #include <stdio.h>
 #include <stdlib.h>
