@@ -135,6 +135,10 @@ int index_status(const Index *index) {
 //   - hex_to_hash                      : converting the parsed string to ObjectID
 //
 // Returns 0 on success, -1 on error.
+// Loads index from disk into memory
+// Initializes empty index if file does not exist
+// Prevents crashes by zero-initializing structure
+
 int index_load(Index *index) {
     // Fully zero the struct (prevents garbage paths / strcmp crashes)
     memset(index, 0, sizeof(Index));
