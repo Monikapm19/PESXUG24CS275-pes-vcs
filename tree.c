@@ -12,14 +12,22 @@
 // Phase 2: Tree module implementation
 // Handles directory representation as tree objects
 // Maps file paths into hierarchical structure
+// Serialize tree entries into Git-compatible binary format
+// Ensures deterministic ordering using lexicographic sorting
 
+// Parse raw tree object data into structured Tree entries
+// Handles binary-safe parsing with strict boundary checks
+
+// Build tree object from index entries (flat → hierarchical mapping)
+// Currently handles simple structure (no nested directories)
 #include "tree.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 #include <sys/stat.h>
-
+#include "index.h"
+#include "pes.h"
 // ─── Mode Constants ─────────────────────────────────────────────────────────
 
 #define MODE_FILE      0100644
@@ -141,8 +149,26 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
 // Builds a tree object from index entries
 // Converts flat file list into hierarchical directory structure
 int tree_from_index(ObjectID *id_out) {
-    // TODO: Implement recursive tree building
-    // (See Lab Appendix for logical steps)
-    (void)id_out;
-    return -1;
+    Index index;
+
+    if (index_load(&index) != 0) return -1;
+
+    Tree tree;
+    tree.count = index.count;
+
+    for (int i = 0; i < index.count; i++) {
+        tree.entries[i].mode = index.entries[i].mode;
+        strcpy(tree.entries[i].name, index.entries[i].path);
+        tree.entries[i].hash = index.entries[i].hash;
+    }
+
+    void *data;
+    size_t len;
+
+    if (tree_serialize(&tree, &data, &len) != 0) return -1;
+
+    int rc = object_write(OBJ_TREE, data, len, id_out);
+
+    free(data);
+    return rc;
 }
