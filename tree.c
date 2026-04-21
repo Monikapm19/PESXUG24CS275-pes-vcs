@@ -8,7 +8,9 @@
 //
 // Example single entry (conceptual):
 //   "100644 hello.txt\0" followed by 32 raw bytes of SHA-256
-
+// Phase 2: Tree module implementation
+// Handles directory representation as tree objects
+// Maps file paths into hierarchical structure
 #include "tree.h"
 #include <stdio.h>
 #include <stdlib.h>
