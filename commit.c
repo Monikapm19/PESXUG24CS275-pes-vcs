@@ -194,8 +194,43 @@ int head_update(const ObjectID *new_commit) {
 //
 // Returns 0 on success, -1 on error.
 int commit_create(const char *message, ObjectID *commit_id_out) {
-    // TODO: Implement commit creation
-    // (See Lab Appendix for logical steps)
-    (void)message; (void)commit_id_out;
-    return -1;
+    ObjectID tree_id;
+
+    // 1. Build tree from index
+    if (tree_from_index(&tree_id) != 0) {
+        fprintf(stderr, "error: failed to create tree\n");
+        return -1;
+    }
+
+    char tree_hex[HASH_HEX_SIZE + 1];
+    hash_to_hex(&tree_id, tree_hex);
+
+    // 2. Prepare commit content
+    char buffer[1024];
+    snprintf(buffer, sizeof(buffer),
+             "tree %s\n"
+             "author Monika <monika@example.com>\n"
+             "committer Monika <monika@example.com>\n\n"
+             "%s\n",
+             tree_hex, message);
+
+    // 3. Write commit object
+    ObjectID commit_id;
+    if (object_write(OBJ_COMMIT, buffer, strlen(buffer), &commit_id) != 0) {
+        return -1;
+    }
+
+    // 4. Return commit id
+    *commit_id_out = commit_id;
+
+    // 5. Update HEAD
+    char hex[HASH_HEX_SIZE + 1];
+    hash_to_hex(&commit_id, hex);
+
+    FILE *f = fopen(".pes/refs/heads/main", "w");
+    if (!f) return -1;
+    fprintf(f, "%s\n", hex);
+    fclose(f);
+
+    return 0;
 }
