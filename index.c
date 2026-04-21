@@ -234,6 +234,12 @@ int index_save(const Index *index) {
 // Returns 0 on success, -1 on error.
 // Make sure this prototype exists at top of file:
 int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out);
+// Adds file to staging area
+// Stores file content as blob object
+// Updates index entry with metadata (size, mtime, hash)
+
+
+
 
 int index_add(Index *index, const char *path) {
     struct stat st;
